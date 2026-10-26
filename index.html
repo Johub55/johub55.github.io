@@ -124,7 +124,7 @@
         const statusMsg = document.getElementById('status');
 
         // REPOS RECHTSTREEKS EN SNEL LADEN
-        fetch(`https://github.com{username}/repos?sort=updated&per_page=100`)
+        fetch(`https://api.github.com/{username}/repos?sort=updated&per_page=100`)
             .then(res => { if (!res.ok) throw new Error(); return res.json(); })
             .then(repos => {
                 const projectRepos = repos.filter(repo => repo.name.toLowerCase() !== `${username.toLowerCase()}.github.io`);
