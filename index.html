@@ -34,7 +34,6 @@
             max-width: 800px;
         }
 
-        /* GIGANTISCHE EASTER EGG TEKST */
         .glitch-title {
             font-size: 3.5rem;
             font-weight: 900;
@@ -43,14 +42,10 @@
             cursor: pointer;
             text-transform: uppercase;
             letter-spacing: 2px;
-            transition: color 0.3s;
             user-select: none;
         }
-        .glitch-title:hover {
-            color: #39d353;
-        }
+        .glitch-title:hover { color: #39d353; }
 
-        /* DYNAMISCHE ERROR LOG ONDER DE TITEL */
         .error-ticker {
             font-family: "Courier New", Courier, monospace;
             color: #ff7b72;
@@ -61,27 +56,11 @@
             margin-top: 15px;
             font-size: 0.9rem;
             border: 1px solid #363b42;
-            min-height: 20px;
         }
 
-        .subtitle {
-            color: #8b949e;
-            font-size: 1.2rem;
-            margin-top: 20px;
-        }
-
-        main {
-            width: 90%;
-            max-width: 1000px;
-            padding-bottom: 60px;
-        }
-
-        h2 {
-            border-bottom: 1px solid var(--card-border);
-            padding-bottom: 10px;
-            color: #f0f6fc;
-            font-size: 1.5rem;
-        }
+        .subtitle { color: #8b949e; font-size: 1.2rem; margin-top: 20px; }
+        main { width: 90%; max-width: 1000px; padding-bottom: 60px; }
+        h2 { border-bottom: 1px solid var(--card-border); padding-bottom: 10px; color: #f0f6fc; font-size: 1.5rem; }
 
         .projects-grid {
             display: grid;
@@ -100,32 +79,11 @@
             justify-content: space-between;
             transition: transform 0.2s, border-color 0.2s;
         }
+        .project-card:hover { transform: translateY(-4px); border-color: var(--accent-color); }
 
-        .project-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent-color);
-        }
-
-        .project-title {
-            font-size: 1.3rem;
-            font-weight: 600;
-            color: #58a6ff;
-            margin: 0 0 10px 0;
-            text-transform: capitalize;
-        }
-
-        .project-desc {
-            color: #8b949e;
-            font-size: 0.95rem;
-            line-height: 1.4;
-            margin: 0 0 24px 0;
-            flex-grow: 1;
-        }
-
-        .btn-container {
-            display: flex;
-            gap: 10px;
-        }
+        .project-title { font-size: 1.3rem; font-weight: 600; color: #58a6ff; margin: 0 0 10px 0; text-transform: capitalize; }
+        .project-desc { color: #8b949e; font-size: 0.95rem; line-height: 1.4; margin: 0 0 24px 0; flex-grow: 1; }
+        .btn-container { display: flex; gap: 10px; }
 
         .btn {
             flex: 1;
@@ -136,49 +94,27 @@
             text-align: center;
             font-weight: 600;
             font-size: 0.85rem;
-            transition: background-color 0.2s, border-color 0.2s;
         }
+        .btn-live { background-color: var(--btn-green); color: #ffffff; }
+        .btn-live:hover { background-color: #2ea44f; }
+        .btn-repo { background-color: var(--btn-gray); color: #c9d1d9; border: 1px solid var(--btn-gray-border); }
+        .btn-repo:hover { background-color: #30363d; border-color: #8b949e; }
 
-        .btn-live {
-            background-color: var(--btn-green);
-            color: #ffffff;
-        }
-        .btn-live:hover {
-            background-color: #2ea44f;
-        }
-
-        .btn-repo {
-            background-color: var(--btn-gray);
-            color: #c9d1d9;
-            border: 1px solid var(--btn-gray-border);
-        }
-        .btn-repo:hover {
-            background-color: #30363d;
-            border-color: #8b949e;
-        }
-
-        .status-msg {
-            text-align: center;
-            color: #8b949e;
-            font-style: italic;
-            padding: 40px;
-            grid-column: 1 / -1;
-        }
+        .status-msg { text-align: center; color: #8b949e; font-style: italic; padding: 40px; grid-column: 1 / -1; }
     </style>
 </head>
 <body>
 
     <header>
-        <!-- Beweeg je muis hierover voor het Matrix-effect + willekeurige error codes! -->
         <h1 class="glitch-title" data-value="JOHUB55">JOHUB55</h1>
         <div class="error-ticker" id="ticker">Systeem status: OK. Beweeg je muis over mijn naam...</div>
-        <p class="subtitle">Welkom op mijn officiële GitHub startpagina. Bekijk mijn projecten hieronder.</p>
+        <p class="subtitle">Welkom op mijn officiële GitHub startpagina.</p>
     </header>
 
     <main>
         <h2>Mijn Projecten & Games</h2>
         <div class="projects-grid" id="projects-container">
-            <div class="status-msg" id="status">Projecten laden en Pages controleren...</div>
+            <div class="status-msg" id="status">Projecten laden...</div>
         </div>
     </main>
 
@@ -187,81 +123,53 @@
         const container = document.getElementById('projects-container');
         const statusMsg = document.getElementById('status');
 
-        // LEEG CONTAINER EN HAAL REPOS OP
+        // REPOS RECHTSTREEKS EN SNEL LADEN
         fetch(`https://github.com{username}/repos?sort=updated&per_page=100`)
-            .then(response => {
-                if (!response.ok) throw new Error('API fout');
-                return response.json();
-            })
-            .then(async repos => {
+            .then(res => { if (!res.ok) throw new Error(); return res.json(); })
+            .then(repos => {
                 const projectRepos = repos.filter(repo => repo.name.toLowerCase() !== `${username.toLowerCase()}.github.io`);
-
-                if (projectRepos.length === 0) {
-                    statusMsg.innerText = "Geen openbare projecten gevonden.";
-                    return;
-                }
+                if (projectRepos.length === 0) { statusMsg.innerText = "Geen openbare projecten gevonden."; return; }
 
                 container.innerHTML = '';
 
-                // Loop door de repos heen en controleer asynchroon of de Pages live staat
-                for (const repo of projectRepos) {
+                repos.forEach(repo => {
+                    // Sla de hoofd-repo over
+                    if (repo.name.toLowerCase() === `${username.toLowerCase()}.github.io`) return;
+
                     const card = document.createElement('div');
                     card.className = 'project-card';
+                    const desc = repo.description ? repo.description : 'Bekijk de broncode of open de live app direct via de knoppen hieronder.';
 
-                    const description = repo.description ? repo.description : 'Bekijk de broncode of open de live app direct via de knoppen hieronder.';
-                    const repoUrl = repo.html_url; 
-                    const pagesUrl = `https://${username}.github.io/${repo.name}/`;
-
-                    // SLIMME TRUC: We vuren een snelle check af naar de Pages pagina van deze repo
-                    let hasPages = false;
-                    try {
-                        const check = await fetch(pagesUrl, { method: 'HEAD' });
-                        if (check.status !== 404) {
-                            hasPages = true;
-                        }
-                    } catch (e) {
-                        // Als het mislukt (CORS of netwerk), gaan we er voor de zekerheid vanuit dat hij bestaat
-                        hasPages = true; 
-                    }
-
-                    // Bouw de knoppen-HTML op basis van de Pages-status
-                    let buttonsHtml = `<a href="${repoUrl}" class="btn btn-repo" target="_blank">Code (GitHub)</a>`;
-                    if (hasPages) {
-                        buttonsHtml += `<a href="${pagesUrl}" class="btn btn-live" target="_blank">Live Site 🚀</a>`;
+                    // Knoppen bouwen. We gebruiken de 'has_pages' eigenschap van GitHub zelf!
+                    let buttonsHtml = `<a href="${repo.html_url}" class="btn btn-repo" target="_blank">Code (GitHub)</a>`;
+                    if (repo.has_pages) {
+                        buttonsHtml += `<a href="https://${username}.github.io/${repo.name}/" class="btn btn-live" target="_blank">Live Site 🚀</a>`;
                     }
 
                     card.innerHTML = `
                         <div>
                             <div class="project-title">${repo.name.replace(/-/g, ' ')}</div>
-                            <p class="project-desc">${description}</p>
+                            <p class="project-desc">${desc}</p>
                         </div>
-                        <div class="btn-container">
-                            ${buttonsHtml}
-                        </div>
+                        <div class="btn-container">${buttonsHtml}</div>
                     `;
                     container.appendChild(card);
-                }
+                });
             })
-            .catch(err => {
-                statusMsg.innerText = "Kon projecten niet laden.";
-                console.error(err);
-            });
+            .catch(() => { statusMsg.innerText = "Kon projecten niet laden."; });
 
-
-        // HILARISCHE ERROR CODES DATABASE
+        // GRAPPIGE ERROR CODES TICKER
         const funnyErrors = [
             "HTTP 413: Content Too Large (Je code is te dik, hij moet op dieet)",
             "HTTP 418: I'm a Teapot (Server weigert koffie te zetten, het is een theepot) 🫖",
-            "HTTP 420: Enhance Your Calm (Rustig aan maat, je stuurt te veel verzoeken) 🧘",
+            "HTTP 420: Enhance Your Calm (Rustig aan maat, te veel verzoeken) 🧘",
             "HTTP 451: Unavailable For Legal Reasons (De FBI keurt deze code af) 👮",
-            "HTTP 500: Internal Server Error (Ergens heeft een developer huilend de serverruimte verlaten)",
+            "HTTP 500: Internal Server Error (Ergens huilt nu een developer)",
             "HTTP 508: Loop Detected (De code zit vast in een oneindige existentiële crisis) 🔄",
-            "HTTP 529: Site Overloaded (De server is even sigaretten halen, zo terug)",
-            "HTTP 530: Site Frozen (De website is bevroren, waarschijnlijk de rekening niet betaald) ❄️",
-            "ERROR 007: Hacker Detected (Matrix-modus geactiveerd. Welkom terug, Neo)"
+            "HTTP 530: Site Frozen (De website is bevroren, rekening niet betaald?) ❄️"
         ];
 
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         const title = document.querySelector(".glitch-title");
         const ticker = document.getElementById("ticker");
         let interval = null;
@@ -269,26 +177,17 @@
         title.onmouseover = event => {  
             let iteration = 0;
             clearInterval(interval);
-            
-            // Kies een willekeurige grappige error code uit de lijst
-            const randomError = funnyErrors[Math.floor(Math.random() * funnyErrors.length)];
-            ticker.innerText = randomError;
-            ticker.style.color = "#ff7b72"; // Foutmelding-rood
+            ticker.innerText = funnyErrors[Math.floor(Math.random() * funnyErrors.length)];
 
             interval = setInterval(() => {
-                event.target.innerText = event.target.innerText
-                    .split("")
-                    .map((letter, index) => {
-                        if(index < iteration) {
-                            return event.target.dataset.value[index];
-                        }
-return letters[Math.floor(Math.random() * letters.length)];
-})
-.join("");
-if(iteration >= event.target.dataset.value.length){
-clearInterval(interval);
-}
-iteration += 1 / 3;
-}, 30);
-};
-
+                event.target.innerText = event.target.innerText.split("").map((letter, index) => {
+                    if(index < iteration) return event.target.dataset.value[index];
+                    return letters[Math.floor(Math.random() * letters.length)];
+                }).join("");
+                if(iteration >= event.target.dataset.value.length) clearInterval(interval);
+                iteration += 1 / 3;
+            }, 30);
+        };
+    </script>
+</body>
+</html>
