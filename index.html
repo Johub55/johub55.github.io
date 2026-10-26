@@ -12,6 +12,8 @@
             --card-bg: #161b22;
             --card-border: #30363d;
             --btn-green: #238636;
+            --btn-gray: #21262d;
+            --btn-gray-border: #363b42;
         }
 
         body {
@@ -28,7 +30,7 @@
 
         header {
             text-align: center;
-            padding: 60px 20px 40px 20px;
+            padding: 60px 20px 30px 20px;
             max-width: 800px;
         }
 
@@ -45,13 +47,27 @@
             user-select: none;
         }
         .glitch-title:hover {
-            color: #39d353; /* GitHub groen bij hover */
+            color: #39d353;
+        }
+
+        /* DYNAMISCHE ERROR LOG ONDER DE TITEL */
+        .error-ticker {
+            font-family: "Courier New", Courier, monospace;
+            color: #ff7b72;
+            background-color: #21262d;
+            padding: 8px 16px;
+            border-radius: 6px;
+            display: inline-block;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            border: 1px solid #363b42;
+            min-height: 20px;
         }
 
         .subtitle {
             color: #8b949e;
             font-size: 1.2rem;
-            margin-top: 15px;
+            margin-top: 20px;
         }
 
         main {
@@ -67,15 +83,13 @@
             font-size: 1.5rem;
         }
 
-        /* GRID STRUKTUUR VOOR REPOS */
         .projects-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 20px;
             margin-top: 20px;
         }
 
-        /* MOOIE DESIGN KAARTEN */
         .project-card {
             background-color: var(--card-bg);
             border: 1px solid var(--card-border);
@@ -104,28 +118,45 @@
             color: #8b949e;
             font-size: 0.95rem;
             line-height: 1.4;
-            margin: 0 0 20px 0;
+            margin: 0 0 24px 0;
             flex-grow: 1;
         }
 
-        .project-link {
+        .btn-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex: 1;
             display: inline-block;
-            background-color: var(--btn-green);
-            color: #ffffff;
             text-decoration: none;
-            padding: 10px 16px;
+            padding: 10px 12px;
             border-radius: 6px;
             text-align: center;
             font-weight: 600;
-            font-size: 0.9rem;
-            transition: background-color 0.2s;
+            font-size: 0.85rem;
+            transition: background-color 0.2s, border-color 0.2s;
         }
 
-        .project-link:hover {
+        .btn-live {
+            background-color: var(--btn-green);
+            color: #ffffff;
+        }
+        .btn-live:hover {
             background-color: #2ea44f;
         }
 
-        /* LOADING & ERROR STATUUS */
+        .btn-repo {
+            background-color: var(--btn-gray);
+            color: #c9d1d9;
+            border: 1px solid var(--btn-gray-border);
+        }
+        .btn-repo:hover {
+            background-color: #30363d;
+            border-color: #8b949e;
+        }
+
         .status-msg {
             text-align: center;
             color: #8b949e;
@@ -138,31 +169,31 @@
 <body>
 
     <header>
-        <!-- Beweeg je muis over deze tekst voor de Easter Egg! -->
+        <!-- Beweeg je muis hierover voor het Matrix-effect + willekeurige error codes! -->
         <h1 class="glitch-title" data-value="JOHUB55">JOHUB55</h1>
+        <div class="error-ticker" id="ticker">Systeem status: OK. Beweeg je muis over mijn naam...</div>
         <p class="subtitle">Welkom op mijn officiële GitHub startpagina. Bekijk mijn projecten hieronder.</p>
     </header>
 
     <main>
         <h2>Mijn Projecten & Games</h2>
         <div class="projects-grid" id="projects-container">
-            <div class="status-msg" id="status">Projecten laden...</div>
+            <div class="status-msg" id="status">Projecten laden en Pages controleren...</div>
         </div>
     </main>
 
     <script>
-        // --- 1. DYNAMISCH JOUW PAGES REPOS OPHALEN ---
         const username = 'Johub55';
         const container = document.getElementById('projects-container');
         const statusMsg = document.getElementById('status');
 
-        fetch(`https://api.github.com/users/${username}/repos?sort=updated&per_page=100`)
+        // LEEG CONTAINER EN HAAL REPOS OP
+        fetch(`https://github.com{username}/repos?sort=updated&per_page=100`)
             .then(response => {
                 if (!response.ok) throw new Error('API fout');
                 return response.json();
             })
-            .then(repos => {
-                // Filter de hoofdwebsite zelf uit de lijst, we willen alleen de subprojecten
+            .then(async repos => {
                 const projectRepos = repos.filter(repo => repo.name.toLowerCase() !== `${username.toLowerCase()}.github.io`);
 
                 if (projectRepos.length === 0) {
@@ -170,45 +201,80 @@
                     return;
                 }
 
-                // Verwijder de "loading" boodschap
                 container.innerHTML = '';
 
-                // Bouw voor elke repository een mooie kaart
-                projectRepos.forEach(repo => {
+                // Loop door de repos heen en controleer asynchroon of de Pages live staat
+                for (const repo of projectRepos) {
                     const card = document.createElement('div');
                     card.className = 'project-card';
 
-                    // Fallback beschrijving als je die op github niet hebt ingevuld
-                    const description = repo.description ? repo.description : 'Klik hieronder om dit live project te openen en te bekijken.';
-                    
-                    // De automatische link naar de GitHub Pages versie van dit project
+                    const description = repo.description ? repo.description : 'Bekijk de broncode of open de live app direct via de knoppen hieronder.';
+                    const repoUrl = repo.html_url; 
                     const pagesUrl = `https://${username}.github.io/${repo.name}/`;
+
+                    // SLIMME TRUC: We vuren een snelle check af naar de Pages pagina van deze repo
+                    let hasPages = false;
+                    try {
+                        const check = await fetch(pagesUrl, { method: 'HEAD' });
+                        if (check.status !== 404) {
+                            hasPages = true;
+                        }
+                    } catch (e) {
+                        // Als het mislukt (CORS of netwerk), gaan we er voor de zekerheid vanuit dat hij bestaat
+                        hasPages = true; 
+                    }
+
+                    // Bouw de knoppen-HTML op basis van de Pages-status
+                    let buttonsHtml = `<a href="${repoUrl}" class="btn btn-repo" target="_blank">Code (GitHub)</a>`;
+                    if (hasPages) {
+                        buttonsHtml += `<a href="${pagesUrl}" class="btn btn-live" target="_blank">Live Site 🚀</a>`;
+                    }
 
                     card.innerHTML = `
                         <div>
                             <div class="project-title">${repo.name.replace(/-/g, ' ')}</div>
                             <p class="project-desc">${description}</p>
                         </div>
-                        <a href="${pagesUrl}" class="project-link" target="_blank">Open Project →</a>
+                        <div class="btn-container">
+                            ${buttonsHtml}
+                        </div>
                     `;
                     container.appendChild(card);
-                });
+                }
             })
             .catch(err => {
-                statusMsg.innerText = "Kon projecten niet laden. Bekijk mijn GitHub profiel handmatig.";
+                statusMsg.innerText = "Kon projecten niet laden.";
                 console.error(err);
             });
 
 
-        // --- 2. EASTER EGG MATRIX CODE EFFECT ---
+        // HILARISCHE ERROR CODES DATABASE
+        const funnyErrors = [
+            "HTTP 413: Content Too Large (Je code is te dik, hij moet op dieet)",
+            "HTTP 418: I'm a Teapot (Server weigert koffie te zetten, het is een theepot) 🫖",
+            "HTTP 420: Enhance Your Calm (Rustig aan maat, je stuurt te veel verzoeken) 🧘",
+            "HTTP 451: Unavailable For Legal Reasons (De FBI keurt deze code af) 👮",
+            "HTTP 500: Internal Server Error (Ergens heeft een developer huilend de serverruimte verlaten)",
+            "HTTP 508: Loop Detected (De code zit vast in een oneindige existentiële crisis) 🔄",
+            "HTTP 529: Site Overloaded (De server is even sigaretten halen, zo terug)",
+            "HTTP 530: Site Frozen (De website is bevroren, waarschijnlijk de rekening niet betaald) ❄️",
+            "ERROR 007: Hacker Detected (Matrix-modus geactiveerd. Welkom terug, Neo)"
+        ];
+
         const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789@#$%&*";
         const title = document.querySelector(".glitch-title");
+        const ticker = document.getElementById("ticker");
         let interval = null;
 
         title.onmouseover = event => {  
             let iteration = 0;
             clearInterval(interval);
             
+            // Kies een willekeurige grappige error code uit de lijst
+            const randomError = funnyErrors[Math.floor(Math.random() * funnyErrors.length)];
+            ticker.innerText = randomError;
+            ticker.style.color = "#ff7b72"; // Foutmelding-rood
+
             interval = setInterval(() => {
                 event.target.innerText = event.target.innerText
                     .split("")
@@ -216,17 +282,3 @@
                         if(index < iteration) {
                             return event.target.dataset.value[index];
                         }
-                        return letters[Math.floor(Math.random() * letters.length)];
-                    })
-                    .join("");
-                
-                if(iteration >= event.target.dataset.value.length){ 
-                    clearInterval(interval);
-                }
-                
-                iteration += 1 / 3;
-            }, 30);
-        };
-    </script>
-</body>
-</html>
