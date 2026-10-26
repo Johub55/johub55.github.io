@@ -3,61 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>404 - Pagina niet gevonden</title>
+    <title>404 - Systeem Crashed</title>
     <style>
+        ::selection {
+            background: #1f6feb;
+            color: #ffffff;
+        }
+        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: #0d1117;
-            color: #c9d1d9;
+            background-color: #040811;
+            color: #39d353; /* GitHub groen */
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             height: 100vh;
             margin: 0;
+            overflow: hidden;
             text-align: center;
         }
+
+        /* SCANLINE EFFECT (Ouderwetse beeldbuis) */
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%), linear-gradient(90deg, rgba(255, 0, 0, 0.06), rgba(0, 255, 0, 0.02), rgba(0, 0, 255, 0.06));
+            z-index: 2;
+            background-size: 100% 2px, 3px 100%;
+            pointer-events: none;
+        }
+
+        .terminal-box {
+            background: #0d1117;
+            border: 2px solid #30363d;
+            border-radius: 8px;
+            padding: 40px;
+            max-width: 600px;
+            width: 85%;
+            box-shadow: 0 0 20px rgba(57, 211, 83, 0.2);
+            position: relative;
+        }
+
         .error-code {
-            font-size: 8rem;
+            font-size: 6rem;
             font-weight: bold;
-            color: #58a6ff;
+            color: #ff7b72; /* Foutmelding rood */
             margin: 0;
-            line-height: 1;
+            text-shadow: 0 0 10px rgba(255, 123, 114, 0.5);
+            animation: pulse 2s infinite;
         }
+
         h1 {
-            font-size: 2rem;
+            font-size: 1.8rem;
             color: #f0f6fc;
-            margin: 20px 0 10px 0;
+            margin: 15px 0;
         }
-        p {
-            font-size: 1.1rem;
+
+        /* LIVE TERMINAL TYPE EFFECT */
+        .typewriter-text {
             color: #8b949e;
-            max-width: 500px;
+            font-size: 1rem;
+            min-height: 45px;
             margin-bottom: 30px;
             line-height: 1.5;
         }
+
+        .cursor {
+            display: inline-block;
+            width: 8px;
+            height: 15px;
+            background-color: #39d353;
+            animation: blink 0.8s infinite;
+            vertical-align: middle;
+            margin-left: 4px;
+        }
+
         .btn {
-            background-color: #238636;
-            color: #ffffff;
+            background-color: transparent;
+            color: #39d353;
+            border: 2px solid #39d353;
             padding: 12px 24px;
             text-decoration: none;
             border-radius: 6px;
-            font-weight: 600;
-            transition: background-color 0.2s;
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-block;
         }
+
         .btn:hover {
-            background-color: #2ea44f;
+            background-color: #39d353;
+            color: #0d1117;
+            box-shadow: 0 0 15px rgba(57, 211, 83, 0.6);
+        }
+
+        /* ANIMATIES */
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.03); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes blink {
+            0%, 49% { opacity: 1; }
+            50%, 100% { opacity: 0; }
         }
     </style>
 </head>
 <body>
 
-    <div class="error-code">404</div>
-    <h1>Task failed successfully.</h1>
-    <p>Oeps! Er staat niks achter deze slash. Deze pagina bestaat niet op de website van Johub55.</p>
-    
-    <!-- De / stuurt de bezoeker direct terug naar jouw hoofd-homepage -->
-    <a href="/" class="btn">Breng me in veiligheid</a>
+    <div class="terminal-box">
+        <div class="error-code">404</div>
+        <h1>CRITICAL_SYSTEM_ERROR</h1>
+        
+        <!-- De tekst die automatisch getypt gaat worden -->
+        <div class="typewriter-text">
+            <span id="terminal-output"></span><span class="cursor"></span>
+        </div>
+        
+        <a href="/" class="btn">Reboot Systeem (Home)</a>
+    </div>
+
+    <script>
+        const textToType = "ERROR: Pagina niet gevonden achter / van Johub55... Zoekopdracht afgebroken... Status: Geofferd aan de Linux OOM-killer... Herstart vereist.";
+        const outputElement = document.getElementById("terminal-output");
+        let index = 0;
+
+        function typeWriter() {
+            if (index < textToType.length) {
+                outputElement.innerHTML += textToType.charAt(index);
+                index++;
+                // Willekeurige snelheid tussen 30ms en 80ms voor een echt computergevoel
+                setTimeout(typeWriter, Math.floor(Math.random() * 50) + 30);
+            }
+        }
+
+        // Start de typ-animatie zodra de pagina laadt
+        window.onload = typeWriter;
+    </script>
 
 </body>
 </html>
