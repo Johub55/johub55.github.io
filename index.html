@@ -127,7 +127,7 @@
         const statusMsg = document.getElementById('status');
 
         // REPOS RECHTSTREEKS OPHALEN VIA CODES VAN DE JOUW USER API
-        fetch(`https://github.com{username}/repos?sort=updated&per_page=100`)
+        fetch(`https://github.com/repos/Johub55/repos?sort=updated&per_page=100`)
             .then(res => { if (!res.ok) throw new Error(); return res.json(); })
             .then(repos => {
                 const projectRepos = repos.filter(repo => repo.name.toLowerCase() !== `${username.toLowerCase()}.github.io`);
