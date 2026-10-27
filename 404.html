@@ -141,7 +141,7 @@
             destructInterval = setInterval(() => {
                 document.getElementById("error-num").innerText = "00" + count;
                 document.getElementById("error-title").innerText = "SELF_DESTRUCT_SEQUENCE";
-                output.innerHTML = `CRITICAL: Systeem vernietiging in ${count} seconden... Sluit alle tabbladen!`;
+                output.innerHTML = `CRITICAL: System destruction requested starting sequence ${count}`;
                 output.style.color = "#ff7b72";
                 count--;
 
@@ -149,7 +149,7 @@
                     clearInterval(destructInterval);
                     document.getElementById("box").style.display = "none";
                     document.body.style.backgroundColor = "#000";
-                    document.body.innerHTML = "<h1 style='color:#ff7b72; font-family:monospace; font-size:2rem; text-align:center; width:100%; margin-top:40vh;'>Error 500: Server succesvol opgeblazen.<br><span style='color:#8b949e; font-size:1.2rem;'>Grapje. Systeem herstarten...</span></h1>";
+                    document.body.innerHTML = "<h1 style='color:#ff7b72; font-family:monospace; font-size:2rem; text-align:center; width:100%; margin-top:40vh;'>Error 500: Server not reachable.<br><span style='color:#8b949e; font-size:1.2rem;'>redirecting...</span></h1>";
                     
                     setTimeout(() => { window.location.href = "/"; }, 3000);
                 }
