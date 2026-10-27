@@ -3,17 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Johub55 | Home</title>
+    <title>Johub55 | Mood Meter</title>
     <style>
         :root {
             --bg-color: #0d1117;
             --text-color: #c9d1d9;
-            --accent-color: #58a6ff;
             --card-bg: #161b22;
             --card-border: #30363d;
-            --btn-green: #238636;
-            --btn-gray: #21262d;
-            --btn-gray-border: #363b42;
+            --mood-color: #58a6ff;
         }
 
         body {
@@ -25,182 +22,189 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            justify-content: center;
             min-height: 100vh;
         }
 
-        header {
-            text-align: center;
-            padding: 60px 20px 30px 20px;
-            max-width: 800px;
-        }
-
-        .glitch-title {
-            font-size: 3.5rem;
-            font-weight: 900;
-            color: #f0f6fc;
-            margin: 0;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            user-select: none;
-        }
-        .glitch-title:hover { color: #39d353; }
-
-        .error-ticker {
-            font-family: "Courier New", Courier, monospace;
-            color: #ff7b72;
-            background-color: #21262d;
-            padding: 8px 16px;
-            border-radius: 6px;
-            display: inline-block;
-            margin-top: 15px;
-            font-size: 0.9rem;
-            border: 1px solid #363b42;
-        }
-
-        .subtitle { color: #8b949e; font-size: 1.2rem; margin-top: 20px; }
-        main { width: 90%; max-width: 1000px; padding-bottom: 60px; }
-        h2 { border-bottom: 1px solid var(--card-border); padding-bottom: 10px; color: #f0f6fc; font-size: 1.5rem; }
-
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-
-        .project-card {
+        .mood-container {
             background-color: var(--card-bg);
-            border: 1px solid var(--card-border);
-            border-radius: 8px;
-            padding: 24px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            transition: transform 0.2s, border-color 0.2s;
-        }
-        .project-card:hover { transform: translateY(-4px); border-color: var(--accent-color); }
-
-        .project-title { font-size: 1.3rem; font-weight: 600; color: #58a6ff; margin: 0 0 10px 0; text-transform: capitalize; }
-        .project-desc { color: #8b949e; font-size: 0.95rem; line-height: 1.4; margin: 0 0 24px 0; flex-grow: 1; }
-        .btn-container { display: flex; gap: 10px; }
-
-        .btn {
-            flex: 1;
-            display: inline-block;
-            text-decoration: none;
-            padding: 10px 12px;
-            border-radius: 6px;
+            border: 2px solid var(--card-border);
+            border-radius: 12px;
+            padding: 40px;
+            max-width: 500px;
+            width: 85%;
             text-align: center;
-            font-weight: 600;
-            font-size: 0.85rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+            transition: border-color 0.3s, box-shadow 0.3s;
         }
-        .btn-live { background-color: var(--btn-green); color: #ffffff; }
-        .btn-live:hover { background-color: #2ea44f; }
-        .btn-repo { background-color: var(--btn-gray); color: #c9d1d9; border: 1px solid var(--btn-gray-border); }
-        .btn-repo:hover { background-color: #30363d; border-color: #8b949e; }
 
-        .status-msg { text-align: center; color: #8b949e; font-style: italic; padding: 40px; grid-column: 1 / -1; }
+        h1 {
+            color: #f0f6fc;
+            margin-top: 0;
+            font-size: 2rem;
+        }
+
+        /* GIGANTISCHE MOOD EMOJI */
+        .mood-emoji {
+            font-size: 6rem;
+            margin: 20px 0;
+            display: inline-block;
+            transition: transform 0.2s ease;
+        }
+        .mood-emoji:active {
+            transform: scale(1.2) rotate(5deg);
+        }
+
+        /* MOOD STATUS TEKST */
+        .mood-status {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--mood-color);
+            margin-bottom: 10px;
+            transition: color 0.3s;
+        }
+
+        .mood-desc {
+            color: #8b949e;
+            font-size: 1rem;
+            min-height: 48px;
+            margin-bottom: 30px;
+        }
+
+        /* DE INTERACTIEVE SCHUIFBALK */
+        .slider-container {
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .mood-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 8px;
+            border-radius: 4px;
+            background: #30363d;
+            outline: none;
+            transition: background 0.3s;
+        }
+
+        /* Styling voor het schuifknopje */
+        .mood-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--mood-color);
+            cursor: pointer;
+            box-shadow: 0 0 10px var(--mood-color);
+            transition: background 0.3s, box-shadow 0.3s, transform 0.1s;
+        }
+        .mood-slider::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .btn-home {
+            display: inline-block;
+            background-color: #21262d;
+            color: #c9d1d9;
+            border: 1px solid #363b42;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .btn-home:hover {
+            background-color: #30363d;
+            border-color: #8b949e;
+        }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1 class="glitch-title" data-value="JOHUB55">JOHUB55</h1>
-        <div class="error-ticker" id="ticker">Systeem status: OK. Beweeg je muis over mijn naam...</div>
-        <p class="subtitle">Welkom op mijn officiële GitHub startpagina.</p>
-    </header>
+    <div class="mood-container" id="container">
+        <h1>Johub55's Mood Meter</h1>
+        
+        <div class="mood-emoji" id="emoji">🤖</div>
+        <div class="mood-status" id="status">Systeem Online</div>
+        <div class="mood-desc" id="desc">De server draait stabiel. Geen gekke dingen te melden.</div>
 
-    <main>
-        <h2>Mijn Projecten & Games</h2>
-        <div class="projects-grid" id="projects-container">
-            <div class="status-msg" id="status">Projecten laden...</div>
+        <div class="slider-container">
+            <input type="range" min="1" max="5" value="3" class="mood-slider" id="moodSlider">
         </div>
-    </main>
+
+        <a href="https://github.io" class="btn-home">← Terug naar Dashboard</a>
+    </div>
 
     <script>
-        const username = 'Johub55';
-        const container = document.getElementById('projects-container');
-        const statusMsg = document.getElementById('status');
+        const slider = document.getElementById("moodSlider");
+        const emojiEl = document.getElementById("emoji");
+        const statusEl = document.getElementById("status");
+        const descEl = document.getElementById("desc");
+        const container = document.getElementById("container");
 
-        // REPOS RECHTSTREEKS EN SNEL LADEN
-        fetch(`https://api.github.com/users/Johub55/repos?sort=updated&per_page=100`)
-            .then(res => { if (!res.ok) throw new Error(); return res.json(); })
-            .then(repos => {
-                const projectRepos = repos.filter(repo => repo.name.toLowerCase() !== `${username.toLowerCase()}.github.io`);
-                if (projectRepos.length === 0) { statusMsg.innerText = "Geen openbare projecten gevonden."; return; }
-
-                container.innerHTML = '';
-
-                repos.forEach(repo => {
-                    // Sla de hoofd-repo over
-                    if (repo.name.toLowerCase() === `${username.toLowerCase()}.github.io`) return;
-
-                    const card = document.createElement('div');
-                    card.className = 'project-card';
-                    const desc = repo.description ? repo.description : 'Bekijk de broncode of open de live app direct via de knoppen hieronder.';
-
-                    // Knoppen bouwen. We gebruiken de 'has_pages' eigenschap van GitHub zelf!
-                    let buttonsHtml = `<a href="${repo.html_url}" class="btn btn-repo" target="_blank">Code (GitHub)</a>`;
-                    if (repo.has_pages) {
-                        buttonsHtml += `<a href="https://${username}.github.io/${repo.name}/" class="btn btn-live" target="_blank">Live Site 🚀</a>`;
-                    }
-
-                    card.innerHTML = `
-                        <div>
-                            <div class="project-title">${repo.name.replace(/-/g, ' ')}</div>
-                            <p class="project-desc">${desc}</p>
-                        </div>
-                        <div class="btn-container">${buttonsHtml}</div>
-                    `;
-                    container.appendChild(card);
-                });
-            })
-            .catch(() => { statusMsg.innerText = "Kon projecten niet laden."; });
-
-        // GRAPPIGE CODES TICKER
-        const funnyErrors = [
-            "HTTP 413: Content Too Large (Je code is te dik, hij moet op dieet)",
-            "HTTP 418: I'm a Teapot (Server weigert koffie te zetten, het is een theepot) 🫖",
-            "HTTP 420: Enhance Your Calm (Rustig aan maat, te veel verzoeken) 🧘",
-            "HTTP 451: Unavailable For Legal Reasons (De FBI keurt deze code af) 👮",
-            "HTTP 500: Internal Server Error (Ergens huilt nu een developer)",
-            "HTTP 508: Loop Detected (De code zit vast in een oneindige crisis) 🔄",
-            "HTTP 530: Site Frozen (De website is bevroren, rekening niet betaald?) ❄️"
-        ];
-
-        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        const title = document.querySelector(".glitch-title");
-        const ticker = document.getElementById("ticker");
-        let interval = null;
-
-        title.onmouseover = event => {  
-            let iteration = 0;
-            clearInterval(interval);
-
-            // --- DE RANDOMLY DOORSTUUR TRUC ---
-            // Math.random() geeft een getal tussen 0 en 1. 0.10 betekent 10% kans.
-            if (Math.random() < 0.10) { 
-                ticker.innerText = "FATAL ERROR: Systeem oververhit! Omleiden...";
-                ticker.style.color = "#ff7b72";
-                
-                // Wacht een halve seconde (500ms) zodat ze de schriktekst nog net zien, en stuur ze dan door!
-                setTimeout(() => {
-                    window.location.href = "/systeem-crash-troll-link"; 
-                }, 500);
-                return; // Stop de rest van de normale animatie
+        // DE MOOD DATABASE
+        const moods = {
+            1: {
+                emoji: "💀",
+                status: "CRITICAL_SYSTEM_FAILURE",
+                desc: "Mijn code werkt niet, ik snap niet waarom, en ik wil mijn laptop door het raam gooien.",
+                color: "#ff7b72", // Rood
+                shadow: "rgba(255, 123, 114, 0.2)"
+            },
+            2: {
+                emoji: "😭",
+                status: "StackOverflow Mode",
+                desc: "Ik ben al 3 uur een bug aan het zoeken die achteraf een missende puntkomma bleek te zijn.",
+                color: "#ffa657", // Oranje
+                shadow: "rgba(255, 166, 87, 0.2)"
+            },
+            3: {
+                emoji: "🤖",
+                status: "Systeem Standby",
+                desc: "Gewoon lekker rustig aan het programmeren. De server draait stabiel zonder foutmeldingen.",
+                color: "#58a6ff", // Blauw
+                shadow: "rgba(88, 166, 255, 0.2)"
+            },
+            4: {
+                emoji: "😎",
+                status: "Task Failed Successfully",
+                desc: "Mijn code heeft mega veel waarschuwingen, maar het werkt op de een of andere manier wel. We raken niks meer aan!",
+                color: "#39d353", // GitHub Groen
+                shadow: "rgba(57, 211, 83, 0.2)"
+            },
+            5: {
+                emoji: "🧙‍♂️",
+                status: "God Mode (Linus Torvalds)",
+                desc: "Ik heb zojuist een geniale feature gebouwd in één keer zonder foutmeldingen. Ik ben een code-tovenaar.",
+                color: "#d4bbff", // Paars
+                shadow: "rgba(212, 187, 255, 0.2)"
             }
-
-            // Normale werking als de 10% kans niet hit:
-            ticker.innerText = funnyErrors[Math.floor(Math.random() * funnyErrors.length)];
-            ticker.style.color = "#ff7b72";
-
-            interval = setInterval(() => {
-                event.target.innerText = event.target.innerText.split("").map((letter, index) => {
-                    if(index < iteration) return event.target.dataset.value[index];
-                    return letters[Math.floor(Math.random() * letters.length)];
-                }).join("");
-                if(iteration >= event.target.dataset.value.length) clearInterval(interval);
-                iteration += 1 / 3;
-            }, 30);
         };
+
+        function updateMood(value) {
+            const currentMood = moods[value];
+            
+            // Update teksten en emoji
+            emojiEl.innerText = currentMood.emoji;
+            statusEl.innerText = currentMood.status;
+            descEl.innerText = currentMood.desc;
+            
+            // Update CSS variabelen voor de kleuren en glow-effecten
+            document.documentElement.style.setProperty('--mood-color', currentMood.color);
+            container.style.borderColor = currentMood.color;
+            container.style.boxShadow = `0 8px 32px ${currentMood.shadow}`;
+        }
+
+        // Luister naar het schuiven van de slider
+        slider.addEventListener("input", (e) => {
+            updateMood(e.target.value);
+        });
+
+        // Start op de middelste mood (3)
+        updateMood(3);
+    </script>
+
+</body>
+</html>
