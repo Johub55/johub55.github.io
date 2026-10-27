@@ -3,207 +3,109 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Johub55 | Mood Meter</title>
+    <title>Systeem Fout</title>
     <style>
-        :root {
-            --bg-color: #0d1117;
-            --text-color: #c9d1d9;
-            --card-bg: #161b22;
-            --card-border: #30363d;
-            --mood-color: #58a6ff;
-        }
-
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
+            background-color: #040811;
+            color: #39d353;
+            font-family: 'Courier New', Courier, monospace;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            min-height: 100vh;
-        }
-
-        .mood-container {
-            background-color: var(--card-bg);
-            border: 2px solid var(--card-border);
-            border-radius: 12px;
-            padding: 40px;
-            max-width: 500px;
-            width: 85%;
+            height: 100vh;
+            margin: 0;
             text-align: center;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
-            transition: border-color 0.3s, box-shadow 0.3s;
         }
-
-        h1 {
-            color: #f0f6fc;
-            margin-top: 0;
-            font-size: 2rem;
+        body::before {
+            content: " ";
+            display: block;
+            position: fixed;
+            top: 0; left: 0; bottom: 0; right: 0;
+            background: linear-gradient(rgba(18, 16, 16, 0) 50%, rgba(0, 0, 0, 0.25) 50%);
+            z-index: 2;
+            background-size: 100% 2px;
+            pointer-events: none;
         }
-
-        /* GIGANTISCHE MOOD EMOJI */
-        .mood-emoji {
+        .terminal-box {
+            background: #0d1117;
+            border: 2px solid #30363d;
+            border-radius: 8px;
+            padding: 40px;
+            max-width: 600px;
+            width: 85%;
+            box-shadow: 0 0 20px rgba(57, 211, 83, 0.2);
+        }
+        .error-code {
             font-size: 6rem;
-            margin: 20px 0;
-            display: inline-block;
-            transition: transform 0.2s ease;
-        }
-        .mood-emoji:active {
-            transform: scale(1.2) rotate(5deg);
-        }
-
-        /* MOOD STATUS TEKST */
-        .mood-status {
-            font-size: 1.5rem;
             font-weight: bold;
-            color: var(--mood-color);
-            margin-bottom: 10px;
-            transition: color 0.3s;
+            color: #ff7b72;
+            margin: 0;
+            text-shadow: 0 0 10px rgba(255, 123, 114, 0.5);
         }
-
-        .mood-desc {
-            color: #8b949e;
-            font-size: 1rem;
-            min-height: 48px;
-            margin-bottom: 30px;
+        h1 { font-size: 1.8rem; color: #f0f6fc; margin: 15px 0; }
+        .typewriter-text { color: #8b949e; font-size: 1rem; min-height: 45px; margin-bottom: 30px; }
+        .btn {
+            background-color: transparent; color: #39d353; border: 2px solid #39d353;
+            padding: 12px 24px; text-decoration: none; border-radius: 6px;
+            font-weight: bold; text-transform: uppercase; cursor: pointer; display: inline-block;
         }
-
-        /* DE INTERACTIEVE SCHUIFBALK */
-        .slider-container {
-            position: relative;
-            margin-bottom: 40px;
-        }
-
-        .mood-slider {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 8px;
-            border-radius: 4px;
-            background: #30363d;
-            outline: none;
-            transition: background 0.3s;
-        }
-
-        /* Styling voor het schuifknopje */
-        .mood-slider::-webkit-slider-thumb {
-            -webkit-appearance: none;
-            appearance: none;
-            width: 24px;
-            height: 24px;
-            border-radius: 50%;
-            background: var(--mood-color);
-            cursor: pointer;
-            box-shadow: 0 0 10px var(--mood-color);
-            transition: background 0.3s, box-shadow 0.3s, transform 0.1s;
-        }
-        .mood-slider::-webkit-slider-thumb:hover {
-            transform: scale(1.2);
-        }
-
-        .btn-home {
-            display: inline-block;
-            background-color: #21262d;
-            color: #c9d1d9;
-            border: 1px solid #363b42;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 6px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: background-color 0.2s, border-color 0.2s;
-        }
-        .btn-home:hover {
-            background-color: #30363d;
-            border-color: #8b949e;
-        }
+        .btn:hover { background-color: #39d353; color: #0d1117; }
     </style>
 </head>
 <body>
 
-    <div class="mood-container" id="container">
-        <h1>Johub55's Mood Meter</h1>
-        
-        <div class="mood-emoji" id="emoji">🤖</div>
-        <div class="mood-status" id="status">Systeem Online</div>
-        <div class="mood-desc" id="desc">De server draait stabiel. Geen gekke dingen te melden.</div>
-
-        <div class="slider-container">
-            <input type="range" min="1" max="5" value="3" class="mood-slider" id="moodSlider">
-        </div>
-
-        <a href="https://github.io" class="btn-home">← Terug naar Dashboard</a>
+    <div class="terminal-box">
+        <!-- Deze code en teksten veranderen nu live via JavaScript! -->
+        <div class="error-code" id="error-num">404</div>
+        <h1 id="error-title">PAGE_NOT_FOUND</h1>
+        <div class="typewriter-text" id="terminal-output"></div>
+        <a href="/" class="btn">Reboot Systeem</a>
     </div>
 
     <script>
-        const slider = document.getElementById("moodSlider");
-        const emojiEl = document.getElementById("emoji");
-        const statusEl = document.getElementById("status");
-        const descEl = document.getElementById("desc");
-        const container = document.getElementById("container");
+        // We kijken naar wat er achter de slash staat
+        const pad = window.location.pathname.replace(/\//g, "").toLowerCase();
+        
+        // Standaard waarden (als het gewoon een typefout is)
+        let code = "404";
+        let title = "PAGE_NOT_FOUND";
+        let boodschap = "ERROR: Pagina niet gevonden. Zoekopdracht afgebroken.";
 
-        // DE MOOD DATABASE
-        const moods = {
-            1: {
-                emoji: "💀",
-                status: "CRITICAL_SYSTEM_FAILURE",
-                desc: "Mijn code werkt niet, ik snap niet waarom, en ik wil mijn laptop door het raam gooien.",
-                color: "#ff7b72", // Rood
-                shadow: "rgba(255, 123, 114, 0.2)"
-            },
-            2: {
-                emoji: "😭",
-                status: "StackOverflow Mode",
-                desc: "Ik ben al 3 uur een bug aan het zoeken die achteraf een missende puntkomma bleek te zijn.",
-                color: "#ffa657", // Oranje
-                shadow: "rgba(255, 166, 87, 0.2)"
-            },
-            3: {
-                emoji: "🤖",
-                status: "Systeem Standby",
-                desc: "Gewoon lekker rustig aan het programmeren. De server draait stabiel zonder foutmeldingen.",
-                color: "#58a6ff", // Blauw
-                shadow: "rgba(88, 166, 255, 0.2)"
-            },
-            4: {
-                emoji: "😎",
-                status: "Task Failed Successfully",
-                desc: "Mijn code heeft mega veel waarschuwingen, maar het werkt op de een of andere manier wel. We raken niks meer aan!",
-                color: "#39d353", // GitHub Groen
-                shadow: "rgba(57, 211, 83, 0.2)"
-            },
-            5: {
-                emoji: "🧙‍♂️",
-                status: "God Mode (Linus Torvalds)",
-                desc: "Ik heb zojuist een geniale feature gebouwd in één keer zonder foutmeldingen. Ik ben een code-tovenaar.",
-                color: "#d4bbff", // Paars
-                shadow: "rgba(212, 187, 255, 0.2)"
-            }
-        };
-
-        function updateMood(value) {
-            const currentMood = moods[value];
-            
-            // Update teksten en emoji
-            emojiEl.innerText = currentMood.emoji;
-            statusEl.innerText = currentMood.status;
-            descEl.innerText = currentMood.desc;
-            
-            // Update CSS variabelen voor de kleuren en glow-effecten
-            document.documentElement.style.setProperty('--mood-color', currentMood.color);
-            container.style.borderColor = currentMood.color;
-            container.style.boxShadow = `0 8px 32px ${currentMood.shadow}`;
+        // GEANVANCEERDE NESTING: we kapen de 404 als ze een specifieke code intypen!
+        if (pad === "418") {
+            code = "418";
+            title = "I_AM_A_TEAPOT";
+            boodschap = "CRITICAL: De server weigert koffie te zetten omdat het een theepot is. 🫖";
+        } else if (pad === "413") {
+            code = "413";
+            title = "CONTENT_TOO_LARGE";
+            boodschap = "ERROR: Je data is veel te dik! De server weigert dit te tillen.";
+        } else if (pad.startsWith("5")) {
+            code = pad.toUpperCase();
+            title = "SERVER_EXPLOSION";
+            boodschap = "FATAL: Een 5xx server-error! Ergens in de serverruimte is een developer huilend weggelopen.";
+        } else if (pad === "143") {
+            code = "143";
+            title = "SIGTERM_KILLED";
+            boodschap = "STOP: Proces succesvol stopgezet via het Linux-systeem (Code 143).";
         }
 
-        // Luister naar het schuiven van de slider
-        slider.addEventListener("input", (e) => {
-            updateMood(e.target.value);
-        });
-
-        // Start op de middelste mood (3)
-        updateMood(3);
+        // Zet de teksten in het scherm
+        document.getElementById("error-num").innerText = code;
+        document.getElementById("error-title").innerText = title;
+        
+        // Typ-animatie voor de boodschap
+        const output = document.getElementById("terminal-output");
+        let index = 0;
+        function typeWriter() {
+            if (index < boodschap.length) {
+                output.innerHTML += boodschap.charAt(index);
+                index++;
+                setTimeout(typeWriter, 40);
+            }
+        }
+        window.onload = typeWriter;
     </script>
 
 </body>
