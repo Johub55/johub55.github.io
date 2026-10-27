@@ -37,16 +37,25 @@
             position: relative;
         }
 
+        /* 404 ALS GROTE GEHEIME KNOP */
         .error-code {
             font-size: 6rem;
             font-weight: bold;
             color: #ff7b72;
             margin: 0;
             text-shadow: 0 0 10px rgba(255, 123, 114, 0.5);
+            cursor: pointer;
+            user-select: none;
+            display: inline-block;
+            transition: transform 0.1s;
+        }
+        .error-code:hover {
+            transform: scale(1.05);
+            text-shadow: 0 0 20px rgba(255, 123, 114, 0.8);
         }
 
         h1 { font-size: 1.8rem; color: #f0f6fc; margin: 15px 0; }
-        .typewriter-text { color: #8b949e; font-size: 1rem; min-height: 45px; margin-bottom: 30px; }
+        .typewriter-text { color: #8b949e; font-size: 1rem; min-height: 45px; margin-bottom: 30px; line-height: 1.5; }
         
         .btn {
             background-color: transparent; color: #39d353; border: 2px solid #39d353;
@@ -55,31 +64,6 @@
             display: inline-block; z-index: 6; position: relative;
         }
         .btn:hover { background-color: #39d353; color: #0d1117; box-shadow: 0 0 10px rgba(57, 211, 83, 0.5); }
-
-        /* DE VERSTOPTE EASTER EGG STYLING */
-        .hidden-dot {
-            background: transparent;
-            border: none;
-            color: #21262d; /* Bijna onzichtbaar donkergrijs */
-            cursor: pointer;
-            font-size: 0.8rem;
-            position: absolute;
-            bottom: 10px;
-            right: 15px;
-            padding: 0;
-            margin: 0;
-            user-select: none;
-        }
-        .hidden-dot:hover { color: #39d353; } /* Licht heel subtiel op als je er exact op staat */
-
-        /* LOUISAYY SCREEN FLASH EFFECT */
-        .louisayy-flash {
-            animation: explode-flash 0.1s infinite;
-        }
-        @keyframes explode-flash {
-            0%, 100% { background-color: #ff0000; }
-            50% { background-color: #ffcc00; }
-        }
     </style>
 </head>
 <body>
@@ -87,21 +71,21 @@
     <canvas id="matrixCtx"></canvas>
 
     <div class="terminal-box" id="box">
-        <div class="error-code" id="error-num">404</div>
+        <!-- Klik hierop voor de zelfvernietigings-easter egg! -->
+        <div class="error-code" id="error-num" onclick="triggerDestruct()">404</div>
         <h1 id="error-title">PAGE_NOT_FOUND</h1>
         <div class="typewriter-text" id="terminal-output"></div>
         
         <a href="/" class="btn">Reboot (Home)</a>
-
-        <!-- Het super kleine onopvallende puntje onderin als geheime knop -->
-        <button class="hidden-dot" onclick="triggerDestruct()">.</button>
     </div>
 
     <script>
-        // --- 1. DYNAMISCHE ERROR STRUKTUUR ---
+        // --- 1. DYNAMISCHE TEXT EN JOUW NIEUWE INPUT ---
         const pad = window.location.pathname.replace(/\//g, "").toLowerCase();
         let code = "404";
         let title = "PAGE_NOT_FOUND";
+        
+        // JOUW AANGEPASTE TEKST HIERONDER VERWERKT:
         let boodschap = "ERROR: Pagina niet gevonden vraag aan Johub55 of zoek op de home pagina... Zoekopdracht afgebroken.";
 
         if (pad === "418") {
@@ -130,17 +114,13 @@
 
 
         // --- 2. DE BRILJANTE INSPECTEER-DETECTOR ---
-        // We controleren of het DevTools scherm openschuift
         let devtoolsOpen = false;
         const threshold = 160;
-        
         setInterval(() => {
             const widthThreshold = window.outerWidth - window.innerWidth > threshold;
             const heightThreshold = window.outerHeight - window.innerHeight > threshold;
-            
             if ((widthThreshold || heightThreshold) && !devtoolsOpen) {
                 devtoolsOpen = true;
-                // Kaap direct de terminal zodra ze inspecteren!
                 document.getElementById("error-num").innerText = "999";
                 document.getElementById("error-title").innerText = "MAINFRAME_BREACH";
                 output.innerHTML = "WARNING: Onbevoegde inspectie gedetecteerd in Johub55's mainframe. Tegen-hack gestart... IP gelogd. 🤖";
@@ -149,27 +129,31 @@
         }, 500);
 
 
-        // --- 3. DE GEHEIME LOUISAYY EXPLOSIE ---
-        function triggerDestruct() {
-            const box = document.getElementById("box");
-            box.style.display = "none"; // Gooi de terminal meteen weg
-            
-            // Start de flitsende Louisayy-explosie achtergrond!
-            document.body.classList.add("louisayy-flash");
-            
-            // Maak een gigantische meme-achtige tekst in het midden van het scherm
-            document.body.innerHTML = `
-                <div style="text-align:center; width:100%; color:#fff; font-family:sans-serif; z-index:10; position:relative;">
-                    <h1 style="font-size:5rem; font-weight:900; margin:0; text-shadow:5px 5px #000; letter-spacing:3px;">BOOM! 💥</h1>
-                    <p style="font-size:2rem; font-weight:bold; text-shadow:3px 3px #000; color:#fff;">PROBEERDE JE NOU RECHTSSTREEKS TE EXPLODEREN?!</p>
-                    <p style="font-size:1.2rem; font-family:monospace; color:#eee; text-shadow:2px 2px #000;">Systeem crasht... Terugsturen naar home-basis...</p>
-                </div>
-            `;
+        // --- 3. DE OUDE VERTROUWDE ZELFVERNIETIGING ---
+        let count = 5;
+        let destructInterval;
+        let isDestructing = false;
 
-            // Na 3 seconden flitsen keert het systeem terug naar de homepage
-            setTimeout(() => {
-                window.location.href = "/";
-            }, 3000);
+        function triggerDestruct() {
+            if (isDestructing) return; // Voorkom dubbel klikken
+            isDestructing = true;
+            
+            destructInterval = setInterval(() => {
+                document.getElementById("error-num").innerText = "00" + count;
+                document.getElementById("error-title").innerText = "SELF_DESTRUCT_SEQUENCE";
+                output.innerHTML = `CRITICAL: Systeem vernietiging in ${count} seconden... Sluit alle tabbladen!`;
+                output.style.color = "#ff7b72";
+                count--;
+
+                if (count < 0) {
+                    clearInterval(destructInterval);
+                    document.getElementById("box").style.display = "none";
+                    document.body.style.backgroundColor = "#000";
+                    document.body.innerHTML = "<h1 style='color:#ff7b72; font-family:monospace; font-size:2rem; text-align:center; width:100%; margin-top:40vh;'>Error 500: Server succesvol opgeblazen.<br><span style='color:#8b949e; font-size:1.2rem;'>Grapje. Systeem herstarten...</span></h1>";
+                    
+                    setTimeout(() => { window.location.href = "/"; }, 3000);
+                }
+            }, 1000);
         }
 
 
