@@ -158,14 +158,14 @@
             })
             .catch(() => { statusMsg.innerText = "Kon projecten niet laden."; });
 
-        // GRAPPIGE ERROR CODES TICKER
+        // GRAPPIGE CODES TICKER
         const funnyErrors = [
             "HTTP 413: Content Too Large (Je code is te dik, hij moet op dieet)",
             "HTTP 418: I'm a Teapot (Server weigert koffie te zetten, het is een theepot) 🫖",
             "HTTP 420: Enhance Your Calm (Rustig aan maat, te veel verzoeken) 🧘",
             "HTTP 451: Unavailable For Legal Reasons (De FBI keurt deze code af) 👮",
             "HTTP 500: Internal Server Error (Ergens huilt nu een developer)",
-            "HTTP 508: Loop Detected (De code zit vast in een oneindige existentiële crisis) 🔄",
+            "HTTP 508: Loop Detected (De code zit vast in een oneindige crisis) 🔄",
             "HTTP 530: Site Frozen (De website is bevroren, rekening niet betaald?) ❄️"
         ];
 
@@ -177,7 +177,23 @@
         title.onmouseover = event => {  
             let iteration = 0;
             clearInterval(interval);
+
+            // --- DE RANDOMLY DOORSTUUR TRUC ---
+            // Math.random() geeft een getal tussen 0 en 1. 0.10 betekent 10% kans.
+            if (Math.random() < 0.10) { 
+                ticker.innerText = "FATAL ERROR: Systeem oververhit! Omleiden...";
+                ticker.style.color = "#ff7b72";
+                
+                // Wacht een halve seconde (500ms) zodat ze de schriktekst nog net zien, en stuur ze dan door!
+                setTimeout(() => {
+                    window.location.href = "/systeem-crash-troll-link"; 
+                }, 500);
+                return; // Stop de rest van de normale animatie
+            }
+
+            // Normale werking als de 10% kans niet hit:
             ticker.innerText = funnyErrors[Math.floor(Math.random() * funnyErrors.length)];
+            ticker.style.color = "#ff7b72";
 
             interval = setInterval(() => {
                 event.target.innerText = event.target.innerText.split("").map((letter, index) => {
@@ -188,6 +204,3 @@
                 iteration += 1 / 3;
             }, 30);
         };
-    </script>
-</body>
-</html>
